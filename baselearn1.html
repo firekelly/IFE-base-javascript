@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>基础javascript练习一</title>
+</head>
+<style>
+	span {
+		display: inline-block;
+		height: 50px;
+		background: red;
+		font-size: 40px;
+		line-height: 50px;
+		color: #fff;
+		padding: 0 7px;
+		margin:5px 5px 0 0;
+	}
+</style>
+<body>
+	<div id="total">
+		<div id="head">
+			<input type="text">
+			<input type="submit" value="左侧入">
+			<input type="submit" value="右侧入">
+			<input type="submit" value="左侧出">
+			<input type="submit" value="右侧出">
+		</div>
+		<div id="main"></div>
+	</div>
+</body>
+<script>
+	var ainput = document.getElementsByTagName('input');
+	var omain = document.getElementById("main");
+	var haschild = omain.children.length ? false : true;
+	var allspan = omain.getElementsByTagName("span");
+	var reg = /^[0-9]*$/;
+	/*if(reg.test(ainput[0].value))*/
+	ainput[1].onclick = function(){
+		if (haschild) {
+			createspan();
+		} else if(ainput[0].value != "" && reg.test(ainput[0].value)){
+			var newitem = document.createElement("span");
+			var existing = omain.childNodes[0];
+			omain.insertBefore(newitem,existing);
+			newitem.innerHTML = ainput[0].value;
+			ainput[0].value = "";
+		}else {
+			alert("请输入数字！");
+		}
+		clickremove();
+	}
+	ainput[2].onclick = function(){
+		createspan();
+	}
+	ainput[3].onclick = function(){
+		childremove(omain.firstChild);
+	}
+	ainput[4].onclick = function(){
+		childremove(omain.lastChild);
+	}
+	/*创建节点*/
+	function createspan (){
+		if(ainput[0].value != "" && reg.test(ainput[0].value)) {
+			var aspan = document.createElement("span");
+			omain.appendChild(aspan);
+			aspan.innerHTML = ainput[0].value;
+			ainput[0].value = "";
+			haschild = false;
+			}else {
+				alert("请输入数字!")
+		}
+	}
+	/*侧出*/
+	function childremove (child) {
+		if (child == null) {
+			alert("啥都没有！");
+		} else {
+			alert(child.innerHTML);
+			child.remove();
+		} 
+	}
+	/*点击删除*/
+	function clickremove () {
+		for(var i = 0;i < allspan.length;i++){
+			allspan[i].onclick = function(){
+				this.remove();
+			}
+		}
+	}
+</script>
+</html>
