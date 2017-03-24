@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>基础javascript练习二</title>
+</head>
+<style>
+	span {
+		display: inline-block;
+		width: 20px;
+		height: 50px;
+		background: red;
+		margin-right: 5px;
+	}
+</style>
+<body>
+	<div id="total">
+		<div id="head">
+			<input type="text">
+			<input type="submit" value="左侧入">
+			<input type="submit" value="右侧入">
+			<input type="submit" value="左侧出">
+			<input type="submit" value="右侧出">
+			<input type="submit" value="排序">
+		</div>
+		<div id="main"></div>
+	</div>
+</body>
+<script>
+	var ainput = document.getElementsByTagName('input');
+	var omain = document.getElementById("main");
+	var haschild = omain.children.length ? false : true;
+	var allspan = omain.getElementsByTagName("span");
+	/*var reg = /^[0-9]*$/;*//*限制数字*/
+	var reg = /^[1-9]\d$|^100$/;/*限制数字在10-100之间*/
+	ainput[1].onclick = function(){
+		if (haschild) {
+			createspan();
+		} else if(omain.childNodes.length > 59) {
+			alert("就准你输入60个！");
+		} else if(ainput[0].value != "" && reg.test(ainput[0].value)){
+			/*判断输入框不为空或者非10-100数字*/
+			var newitem = document.createElement("span");
+			var existing = omain.childNodes[0];
+			omain.insertBefore(newitem,existing);
+			newitem.style.marginTop = 15+100-ainput[0].value+'px';
+			newitem.style.height = ainput[0].value + 'px';
+			ainput[0].value = "";
+		}else {
+			alert("请输入10-100数字！");
+		}
+		clickremove();
+	}
+	ainput[2].onclick = function(){
+		createspan();
+	}
+	ainput[3].onclick = function(){
+		childremove(omain.firstChild);
+	}
+	ainput[4].onclick = function(){
+		childremove(omain.lastChild);
+	}
+	ainput[5].onclick = function(){
+		var newarr = [];
+		for(var i=0;i < omain.childNodes.length;i++){
+			var high = omain.childNodes[i].style.height;
+			newarr.push(high);
+		}
+		bubblesort(newarr);
+		console.log(newarr);
+		for(var j=0;j<newarr.length;j++){
+			omain.childNodes[j].style.height = newarr[j];
+		}
+	}
+	/*创建节点*/
+	function createspan (){
+		if(omain.childNodes.length > 59){
+			alert("就准你输入60个！");
+		}else if(ainput[0].value != "" && reg.test(ainput[0].value)) {
+			var aspan = document.createElement("span");
+			omain.appendChild(aspan);
+			aspan.style.marginTop = 15+100-ainput[0].value+'px';
+			aspan.style.height = ainput[0].value + 'px';
+			ainput[0].value = "";
+			haschild = false;
+			}else {
+				alert("请输入10-100数字!")
+		}
+	}
+	/*侧出*/
+	function childremove (child) {
+		if (child == null) {
+			alert("啥都没有！");
+		} else {
+			alert(child.style.height);
+			child.remove();
+		} 
+	}
+	/*点击删除*/
+	function clickremove () {
+		for(var i = 0;i < allspan.length;i++){
+			allspan[i].onclick = function(){
+				this.remove();
+			}
+		}
+	}
+	/*排序*/
+	function bubblesort (arr) {
+			for (var i = 0;i<arr.length;i++) {
+					for (var j = 0; j < arr.length-i-1; j++) {
+						if (arr[j]<arr[j+1]) {
+							var temp=arr[j];
+							arr[j]=arr[j+1];
+							arr[j+1]=temp;
+						}
+					}
+				}
+			return arr;
+	}
+</script>
+</html>
